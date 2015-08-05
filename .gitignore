@@ -1,0 +1,4 @@
+.idea
+vendor
+swoole-ide-helper
+coverage

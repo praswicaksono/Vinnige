@@ -1,0 +1,8 @@
+---
+suites:
+  test_suite:
+    namespace: Vinnige
+    psr4_prefix: Vinnige
+formatter.name: pretty
+extensions:
+    - PhpSpec\Extension\CodeCoverageExtension

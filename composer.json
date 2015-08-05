@@ -1,0 +1,37 @@
+{
+    "name": "jowy/swoole-app-server-framework",
+    "description": "Swoole Based PHP Application Framework",
+    "type": "Application Server",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Prasetyo Wicaksono",
+            "email": "pras@openmailbox.org"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "illuminate/container": "^5.1",
+        "nikic/fast-route": "^0.6.0",
+        "relay/relay": "^0.2.0",
+        "phpixie/http": "3.*@dev",
+        "phpixie/slice": "3.*@dev",
+        "filp/whoops": "^1.1",
+        "symfony/event-dispatcher": "^2.7",
+        "monolog/monolog": "^1.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vinnige\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vinnige\\Stub\\": "stub"
+        }
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^2.2",
+        "henrikbjorn/phpspec-code-coverage": "^1.0"
+    }
+}
