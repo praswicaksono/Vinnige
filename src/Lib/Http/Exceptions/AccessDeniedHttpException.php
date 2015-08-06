@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Vinnige\Lib\Http\Exceptions;
 
 /**

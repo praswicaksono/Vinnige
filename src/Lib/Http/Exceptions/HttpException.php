@@ -10,9 +10,9 @@ namespace Vinnige\Lib\Http\Exceptions;
 class HttpException extends \RuntimeException
 {
     /**
-     * @var int $http_status_code
+     * @var int $httpStatusCode
      */
-    private $http_status_code;
+    private $httpStatusCode;
 
     /**
      * @var array $headers
@@ -20,15 +20,15 @@ class HttpException extends \RuntimeException
     private $headers = [];
 
     /**
-     * @param string $status_code
+     * @param string $statusCode
      * @param string $message
      * @param array $headers
      * @param int $code
      * @param \Exception $previous
      */
-    public function __construct($status_code, $message = "", $headers = [], $code = 0, \Exception $previous = null)
+    public function __construct($statusCode, $message = '', $headers = [], $code = 0, \Exception $previous = null)
     {
-        $this->http_status_code = $status_code;
+        $this->httpStatusCode = $statusCode;
         $this->headers = $headers;
 
         parent::__construct($message, $code, $previous);
@@ -39,7 +39,7 @@ class HttpException extends \RuntimeException
      */
     public function getStatusCode()
     {
-        return $this->http_status_code;
+        return $this->httpStatusCode;
     }
 
     /**
