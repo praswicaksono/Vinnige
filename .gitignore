@@ -2,3 +2,4 @@
 vendor
 swoole-ide-helper
 coverage
+clover.xml
