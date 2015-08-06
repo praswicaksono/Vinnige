@@ -19,6 +19,9 @@ matrix:
 install:
   - travis_retry composer update $COMPOSER_OPTS
 
+before_install:
+  - pecl install swoole
+
 script:
   - bin/phpspec run
 
