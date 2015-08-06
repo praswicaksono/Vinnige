@@ -166,22 +166,31 @@ class ApplicationSpec extends ObjectBehavior
     public function it_should_able_to_run(
         ContainerInterface $container,
         RouteCollector $collector,
-        ConfigurationInterface $config,
         ServerInterface $server
     ) {
+        /**
+         * predictions
+         */
         $container->offsetSet('Middlewares', [])->shouldBeCalled();
         $container->offsetSet('ServiceProviders', [])->shouldBeCalled();
         $container->offsetSet('Routes', [])->shouldBeCalled();
+        $collector->addRoute('GET', '/', 'test')->shouldBeCalled();
+        $server->run()->shouldBeCalled();
+
+        /**
+         * mocks
+         */
         $container->offsetGet('Routes')->willReturn([[
             'method' => 'GET',
             'route' => '/',
             'handler' => 'test'
         ]]);
-        $collector->addRoute('GET', '/', 'test')->shouldBeCalled();
         $container->offsetGet('Server')->willReturn($server);
-        $server->run()->shouldBeCalled();
         $container->offsetGet('RouteCollector')->willReturn($collector);
 
+        /**
+         * test method
+         */
         $this->run();
     }
 }
