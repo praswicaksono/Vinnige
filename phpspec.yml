@@ -4,5 +4,12 @@ suites:
     namespace: Vinnige
     psr4_prefix: Vinnige
 formatter.name: pretty
+code_coverage:
+  format:
+    - html
+    - clover
+  output:
+    html: coverage
+    clover: clover.xml
 extensions:
     - PhpSpec\Extension\CodeCoverageExtension
