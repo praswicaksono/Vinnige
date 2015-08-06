@@ -1,6 +1,10 @@
 Vinnige
 ===
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Atriedes/Vinnige/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Atriedes/Vinnige/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Atriedes/Vinnige/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Atriedes/Vinnige/?branch=master)
+[![Build Status](https://travis-ci.org/Atriedes/Vinnige.svg?branch=master)](https://travis-ci.org/Atriedes/Vinnige)
+
 High Performance & Non-Blocking I/O PHP Web Framework
 
 Usage
