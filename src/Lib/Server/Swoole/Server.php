@@ -60,6 +60,24 @@ class Server implements ServerInterface
     }
 
     /**
+     * @param int $interval
+     * @param callable $callback
+     */
+    public function once($interval, callable $callback)
+    {
+        $this->server->after($interval, $callback);
+    }
+
+    /**
+     * @param int $interval
+     * @param callable $callback
+     */
+    public function periodic($interval, callable $callback)
+    {
+        $this->server->tick($interval, $callback);
+    }
+
+    /**
      * run server
      */
     public function run()

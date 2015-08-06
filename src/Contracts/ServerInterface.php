@@ -16,6 +16,18 @@ interface ServerInterface
     public function on($event, callable $callback);
 
     /**
+     * @param int $interval
+     * @param callable $callback
+     */
+    public function once($interval, callable $callback);
+
+    /**
+     * @param int $interval
+     * @param callable $callback
+     */
+    public function periodic($interval, callable $callback);
+
+    /**
      * @return void
      */
     public function run();

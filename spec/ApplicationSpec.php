@@ -44,6 +44,13 @@ class ApplicationSpec extends ObjectBehavior
         $this->singleton('Test');
     }
 
+    public function it_should_able_check_instance_existance(ContainerInterface $container)
+    {
+        $container->offsetExists('Test')->willReturn(true);
+
+        $this->offsetExists('Test')->shouldReturn(true);
+    }
+
     public function it_should_able_to_get_static_container_instance()
     {
         static::getInstance()->shouldReturn(null);
@@ -125,20 +132,9 @@ class ApplicationSpec extends ObjectBehavior
         $this->shouldThrow('\RuntimeException')->duringMiddleware('SomeString');
     }
 
-    public function it_should_throw_exception_during_register_server_event_when_there_are_server_in_container(
-        ContainerInterface $container,
-        ConfigurationInterface $config
-    ) {
-        $container->offsetSet('Config', $config)->shouldBeCalled();
-        $container->offsetExists('Server')->willReturn(false);
-
-        $this->shouldThrow('\RuntimeException')->duringServerEvent('event', function () {});
-    }
-
     public function it_should_able_register_server_event(
         ContainerInterface $container,
-        ServerInterface $server,
-        ConfigurationInterface $config
+        ServerInterface $server
     ) {
         $func = function () {};
         $container->offsetExists('Server')->willReturn(true);
@@ -161,6 +157,31 @@ class ApplicationSpec extends ObjectBehavior
     public function it_should_able_to_retrieve_registered_routes()
     {
         $this->getRoutes()->shouldReturn([]);
+    }
+
+    public function it_should_able_to_register_one_time_timer(ContainerInterface $container, ServerInterface $server)
+    {
+        $container->offsetGet('Server')->willReturn($server);
+        $container->offsetExists('Server')->willReturn(true);
+        $server->once(100, function () {});
+
+        $this->once(100, function () {});
+    }
+
+    public function it_should_able_to_register_periodic_timer(ContainerInterface $container, ServerInterface $server)
+    {
+        $container->offsetGet('Server')->willReturn($server);
+        $container->offsetExists('Server')->willReturn(true);
+        $server->periodic(100, function () {});
+
+        $this->periodic(100, function () {});
+    }
+
+    public function it_should_throw_exception_when_server_is_not_exist(ContainerInterface $container)
+    {
+        $container->offsetExists('Server')->willReturn(false);
+
+        $this->shouldThrow('\RuntimeException')->duringisServerExist();
     }
 
     public function it_should_able_to_run(

@@ -241,9 +241,7 @@ class Application implements ContainerInterface
      */
     public function serverEvent($event, callable $callback)
     {
-        if (!$this->offsetExists('Server')) {
-            throw new \RuntimeException('server must be set in container');
-        }
+        $this->isServerExist();
 
         $this['Server']->on($event, $callback);
     }
@@ -299,5 +297,42 @@ class Application implements ContainerInterface
         }
 
         $this['Server']->run();
+    }
+
+    /**
+     * @param int $interval
+     * @param callable $callback
+     * @throws \RuntimeException
+     */
+    public function once($interval, callable $callback)
+    {
+        $this->isServerExist();
+
+        $this['Server']->once($interval, $callback);
+    }
+
+    /**
+     * @param int $interval
+     * @param callable $callback
+     * @throws \RuntimeException
+     */
+    public function periodic($interval, callable $callback)
+    {
+        $this->isServerExist();
+
+        $this['Server']->periodic($interval, $callback);
+    }
+
+    /**
+     * @return bool
+     * @throws \RuntimeException
+     */
+    public function isServerExist()
+    {
+        if (! $this->container->offsetExists('Server')) {
+            throw new \RuntimeException('server must be set in container');
+        }
+
+        return true;
     }
 }
