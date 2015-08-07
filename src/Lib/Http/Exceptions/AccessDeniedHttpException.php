@@ -18,4 +18,3 @@ class AccessDeniedHttpException extends HttpException
         parent::__construct(403, $message, [], $code, $previous);
     }
 }
-
