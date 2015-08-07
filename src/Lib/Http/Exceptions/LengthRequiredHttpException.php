@@ -6,7 +6,7 @@ namespace Vinnige\Lib\Http\Exceptions;
  * Class LengthRequiredException
  * @package Vinnige\Lib\Http\Exceptions
  */
-class LengthRequiredException extends HttpException
+class LengthRequiredHttpException extends HttpException
 {
     /**
      * @param string $message
