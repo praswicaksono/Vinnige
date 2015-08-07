@@ -19,7 +19,7 @@ class Server implements ServerInterface
     /**
      * @var \swoole_http_server
      */
-    private $server;
+    public $server;
 
     /**
      * @param ContainerInterface $app
@@ -75,6 +75,23 @@ class Server implements ServerInterface
     public function periodic($interval, callable $callback)
     {
         $this->server->tick($interval, $callback);
+    }
+
+    /**
+     * @param mixed $data
+     */
+    public function asyncTask($data)
+    {
+        $this->server->task($data);
+    }
+
+    /**
+     * @param mixed $data
+     * @return mixed
+     */
+    public function blockingTask($data)
+    {
+        return $this->server->taskwait($data);
     }
 
     /**
