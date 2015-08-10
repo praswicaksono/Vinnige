@@ -38,7 +38,7 @@ class SwooleServerServiceProvider implements ServiceProviderInterface
         $app->singleton(
             'ServerRequestHandler',
             function () use ($app) {
-                return new ServerRequestHandler($app);
+                return new ServerRequestHandler($app, $app['EventDispatcher']);
             }
         );
 

@@ -2,8 +2,13 @@
 
 namespace Vinnige\Lib\Server\Swoole;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\ServerRequestHandlerInterface;
+use Vinnige\Events\AfterMiddlewareEvent;
+use Vinnige\Events\BeforeMiddlewareEvent;
+use Vinnige\Events\OnErrorEvent;
+use Vinnige\Events\VinnigeEvents;
 
 /**
  * Class RequestHandler
@@ -17,11 +22,17 @@ class ServerRequestHandler implements ServerRequestHandlerInterface
     private $app;
 
     /**
+     * @var EventDispatcherInterface $event
+     */
+    private $event;
+
+    /**
      * @param ContainerInterface $app
      */
-    public function __construct(ContainerInterface $app)
+    public function __construct(ContainerInterface $app, EventDispatcherInterface $event)
     {
         $this->app = $app;
+        $this->event = $event;
     }
 
     /**
@@ -54,15 +65,33 @@ class ServerRequestHandler implements ServerRequestHandlerInterface
             }
 
             /**
+             * dispatch before middleware event
+             */
+            $this->event->dispatch(VinnigeEvents::BEFORE_MIDDLEWARE, new BeforeMiddlewareEvent($request, $response));
+
+            /**
              * dispatch middleware
              */
             $response = $dispatcher($request, $response);
+
+            /**
+             * dispatch after middleware event
+             */
+            $this->event->dispatch(VinnigeEvents::AFTER_MIDDLEWARE, new AfterMiddlewareEvent($response));
 
             /**
              * send response to client
              */
             $this->app['ServerResponder']->send($response);
         } catch (\Exception $e) {
+            /**
+             * dispatch on error event
+             */
+            $this->event->dispatch(VinnigeEvents::ON_ERROR, new OnErrorEvent($e));
+
+            /**
+             * default error handler
+             */
             $this->app['ErrorHandler']->handleException($e);
         }
 

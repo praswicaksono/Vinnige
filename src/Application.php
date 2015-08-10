@@ -7,7 +7,8 @@ use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\EventSubscriberInterface;
 use Vinnige\Contracts\MiddlewareInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
-use Vinnige\Providers\SwooleServerServiceProvider;
+use Vinnige\Events\BeforeRunServer;
+use Vinnige\Events\VinnigeEvents;
 
 /**
  * Class Application
@@ -296,6 +297,7 @@ class Application implements ContainerInterface
             $routeCollector->addRoute($route['method'], $route['route'], $route['handler']);
         }
 
+        $this['EventDispatcher']->dispatch(VinnigeEvents::BEFORE_RUN_SERVER, new BeforeRunServer($this['Server']));
         $this['Server']->run();
     }
 
