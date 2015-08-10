@@ -187,7 +187,8 @@ class ApplicationSpec extends ObjectBehavior
     public function it_should_able_to_run(
         ContainerInterface $container,
         RouteCollector $collector,
-        ServerInterface $server
+        ServerInterface $server,
+        EventDispatcherInterface $event
     ) {
         /**
          * predictions
@@ -208,6 +209,7 @@ class ApplicationSpec extends ObjectBehavior
         ]]);
         $container->offsetGet('Server')->willReturn($server);
         $container->offsetGet('RouteCollector')->willReturn($collector);
+        $container->offsetGet('EventDispatcher')->willReturn($event);
 
         /**
          * test method

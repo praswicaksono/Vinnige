@@ -7,15 +7,15 @@ use Prophecy\Argument;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Relay\RelayBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\ServerResponderInterface;
-use Vinnige\Lib\ErrorHandler\ErrorHandler;
 
 class ServerRequestHandlerSpec extends ObjectBehavior
 {
-    public function let(ContainerInterface $container)
+    public function let(ContainerInterface $container, EventDispatcherInterface $event)
     {
-        $this->beConstructedWith($container);
+        $this->beConstructedWith($container, $event);
     }
 
     public function it_is_initializable()
@@ -30,7 +30,8 @@ class ServerRequestHandlerSpec extends ObjectBehavior
         ResponseInterface $response,
         RelayBuilder $relayBuilder,
         ContainerInterface $container,
-        ServerResponderInterface $serverResponder
+        ServerResponderInterface $serverResponder,
+        EventDispatcherInterface $event
     ) {
         unset($GLOBALS['_COOKIE']);
         unset($GLOBALS['_GET']);
@@ -45,6 +46,8 @@ class ServerRequestHandlerSpec extends ObjectBehavior
         $container->offsetGet('RelayBuilder')->willReturn($relayBuilder);
 
         $container->offsetGet('Middlewares')->willReturn([]);
+
+        $container->offsetGet('EventDispatcher')->willReturn($event);
 
         $relayBuilder->newInstance([])->willReturn(
             function (ServerRequestInterface $req, ResponseInterface $res) {
