@@ -1,7 +1,7 @@
 {
     "name": "jowy/vinnige",
     "description": "High Performance & Non-Blocking I/O PHP Web Framework",
-    "type": "Application Server",
+    "type": "framework",
     "license": "MIT",
     "authors": [
         {
