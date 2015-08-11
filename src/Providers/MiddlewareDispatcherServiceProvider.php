@@ -50,10 +50,6 @@ class MiddlewareDispatcherServiceProvider implements ServiceProviderInterface
      */
     public function middlewareResolver($class)
     {
-        if ($class instanceof \Closure) {
-            return $class;
-        }
-
         if (is_callable($class)) {
             return $class;
         }
