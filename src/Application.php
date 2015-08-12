@@ -173,66 +173,71 @@ class Application implements ContainerInterface
 
     /**
      * @param string $route
-     * @param callable $handler
+     * @param callable|string $handler
      * @return $this
      */
-    public function get($route, callable $handler)
+    public function get($route, $handler)
     {
-        $this->routes[] = [
-            'method' => 'GET',
-            'route' => $route,
-            'handler' => $handler
-        ];
+        $this->registerRoute('GET', $route, $handler);
 
         return $this;
     }
 
     /**
      * @param string $route
-     * @param callable $handler
+     * @param callable|callable $handler
      * @return $this
      */
-    public function post($route, callable $handler)
+    public function post($route, $handler)
     {
-        $this->routes[] = [
-            'method' => 'POST',
-            'route' => $route,
-            'handler' => $handler
-        ];
+        $this->registerRoute('POST', $route, $handler);
 
         return $this;
     }
 
     /**
      * @param string $route
-     * @param callable $handler
+     * @param callable|string $handler
      * @return $this
      */
-    public function put($route, callable $handler)
+    public function put($route, $handler)
     {
-        $this->routes[] = [
-            'method' => 'PUT',
-            'route' => $route,
-            'handler' => $handler
-        ];
+        $this->registerRoute('PUT', $route, $handler);
 
         return $this;
     }
 
     /**
      * @param string $route
-     * @param callable $handler
+     * @param callable|string $handler
      * @return $this
      */
-    public function delete($route, callable $handler)
+    public function delete($route, $handler)
     {
+        $this->registerRoute('DELETE', $route, $handler);
+
+        return $this;
+    }
+
+    /**
+     * @param string $method
+     * @param string $route
+     * @param callable|string $handler
+     */
+    private function registerRoute($method, $route, $handler)
+    {
+        /**
+         * if handler is class based register it in container
+         */
+        if (is_string($handler) && class_exists($handler)) {
+            $this->container->singleton($handler);
+        }
+
         $this->routes[] = [
-            'method' => 'DELETE',
+            'method' => $method,
             'route' => $route,
             'handler' => $handler
         ];
-
-        return $this;
     }
 
     /**
