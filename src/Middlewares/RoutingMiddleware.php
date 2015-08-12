@@ -7,6 +7,7 @@ use FastRoute\Dispatcher\GroupCountBased as RouteDispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Vinnige\Contracts\ClassBasedRoutingHandlerInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\MiddlewareInterface;
 use Vinnige\Lib\Http\Exceptions\InternalErrorHttpException;
@@ -40,6 +41,7 @@ class RoutingMiddleware implements MiddlewareInterface
     /**
      * @param RouteDispatcher $dispatcher
      * @param ContainerInterface $app
+     * @param EventDispatcherInterface $event
      */
     public function __construct(RouteDispatcher $dispatcher, ContainerInterface $app, EventDispatcherInterface $event)
     {
@@ -74,6 +76,8 @@ class RoutingMiddleware implements MiddlewareInterface
                 throw new MethodNotAllowedHttpException([$info[0][1]], 'method not allowed');
                 break;
             case Dispatcher::FOUND:
+                $request = $request->withAttribute('param', $info[2]);
+
                 /**
                  * dispatch before dispatch event
                  */
@@ -82,21 +86,21 @@ class RoutingMiddleware implements MiddlewareInterface
                     new BeforeDispatchRouteEvent($request, $info[1])
                 );
 
-                $request = $request->withAttribute('param', $info[2]);
-
                 if (is_callable($info[1])) {
                     $response = $info[1]($request, $response);
                 } else {
-                    if (! $this->app->offsetExists($info[1])) {
+                    $controller = $this->app[$info[1]];
+
+                    if (! $controller instanceof ClassBasedRoutingHandlerInterface) {
                         throw new InternalErrorHttpException(
-                            sprintf('class %s not found', $info[1])
+                            sprintf('class %s must implement %s', $info[1], ClassBasedRoutingHandlerInterface::class)
                         );
                     }
 
                     /**
                      * resolve middleware from container and invoke it
                      */
-                    $response = $this->app[$info[1]]($request, $response);
+                    $response = $controller($request, $response);
                 }
 
                 return $next($request, $response, $next);
