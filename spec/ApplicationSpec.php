@@ -13,6 +13,7 @@ use Vinnige\Contracts\MiddlewareInterface;
 use Vinnige\Contracts\ServerInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
 use Vinnige\Stub\NotValidMiddlewareClass;
+use Vinnige\Stub\Controller;
 
 class ApplicationSpec extends ObjectBehavior
 {
@@ -67,9 +68,11 @@ class ApplicationSpec extends ObjectBehavior
         $this->get('/', function () {})->shouldReturnAnInstanceOf('Vinnige\Application');
     }
 
-    public function it_should_have_post_method()
-    {
-        $this->post('/', function () {})->shouldReturnAnInstanceOf('Vinnige\Application');
+    public function it_should_have_post_method(
+        ContainerInterface $container
+    ) {
+        $container->singleton(Controller::class)->shouldBeCalled();
+        $this->post('/', Controller::class)->shouldReturnAnInstanceOf('Vinnige\Application');
     }
 
     public function it_should_have_put_method()
