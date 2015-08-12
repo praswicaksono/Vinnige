@@ -51,12 +51,13 @@ class RoutingMiddleware implements MiddlewareInterface
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
+     * @param callable $next
      * @return ResponseInterface
      * @throws NotFoundHttpException
      * @throws MethodNotAllowedHttpException
      * @throws InternalErrorHttpException
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         /**
          * dispatch before route
@@ -81,20 +82,24 @@ class RoutingMiddleware implements MiddlewareInterface
                     new BeforeDispatchRouteEvent($request, $info[1])
                 );
 
+                $request = $request->withAttribute('param', $info[2]);
+
                 if (is_callable($info[1])) {
-                    return $info[1]($request->withAttribute('param', $info[2]), $response);
+                    $response = $info[1]($request, $response);
+                } else {
+                    if (! $this->app->offsetExists($info[1])) {
+                        throw new InternalErrorHttpException(
+                            sprintf('class %s not found', $info[1])
+                        );
+                    }
+
+                    /**
+                     * resolve middleware from container and invoke it
+                     */
+                    $response = $this->app[$info[1]]($request, $response);
                 }
 
-                if (! $this->app->offsetExists($info[1])) {
-                    throw new InternalErrorHttpException(
-                        sprintf('class %s not found', $info[1])
-                    );
-                }
-
-                /**
-                 * resolve middleware from container and invoke it
-                 */
-                return $this->app[$info[1]]($request->withAttribute('param', $info[2]), $response);
+                return $next($request, $response, $next);
 
                 break;
             default:
