@@ -39,7 +39,7 @@ class Application implements ContainerInterface
     /**
      * @var Application;
      */
-    private static $instance;
+    protected static $instance;
 
     /**
      * @param ConfigurationInterface $config
@@ -148,16 +148,7 @@ class Application implements ContainerInterface
      */
     public function middleware($middleware)
     {
-        if ($middleware instanceof \Closure) {
-            $this->middlewares[] = $middleware;
-            return $this;
-        }
-
-        if (is_callable($middleware)) {
-            if (! $middleware instanceof MiddlewareInterface) {
-                throw new \RuntimeException(sprintf('middleware should implement %s', MiddlewareInterface::class));
-            }
-            $this->container->singleton($middleware);
+        if ($middleware instanceof \Closure || $middleware instanceof MiddlewareInterface) {
             $this->middlewares[] = $middleware;
             return $this;
         }
