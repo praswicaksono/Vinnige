@@ -118,10 +118,8 @@ class ApplicationSpec extends ObjectBehavior
     }
 
     public function it_should_able_to_register_object_middleware(
-        MiddlewareInterface $middleware,
-        ContainerInterface $container
+        MiddlewareInterface $middleware
     ) {
-        $container->singleton($middleware)->shouldBeCalled();
         $this->middleware($middleware)->shouldReturnAnInstanceOf('Vinnige\Application');
     }
 
