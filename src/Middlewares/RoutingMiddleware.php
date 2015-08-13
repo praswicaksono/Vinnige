@@ -10,12 +10,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vinnige\Contracts\ClassBasedRoutingHandlerInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\MiddlewareInterface;
-use Vinnige\Lib\Http\Exceptions\InternalErrorHttpException;
-use Vinnige\Lib\Http\Exceptions\MethodNotAllowedHttpException;
-use Vinnige\Lib\Http\Exceptions\NotFoundHttpException;
 use Vinnige\Events\BeforeDispatchRouteEvent;
 use Vinnige\Events\BeforeRouteEvent;
 use Vinnige\Events\VinnigeEvents;
+use Vinnige\Lib\Http\Exceptions\InternalErrorHttpException;
+use Vinnige\Lib\Http\Exceptions\MethodNotAllowedHttpException;
+use Vinnige\Lib\Http\Exceptions\NotFoundHttpException;
 
 /**
  * Class RoutingMiddleware
@@ -91,7 +91,7 @@ class RoutingMiddleware implements MiddlewareInterface
                 } else {
                     $controller = $this->app[$info[1]];
 
-                    if (! $controller instanceof ClassBasedRoutingHandlerInterface) {
+                    if (!$controller instanceof ClassBasedRoutingHandlerInterface) {
                         throw new InternalErrorHttpException(
                             sprintf('class %s must implement %s', $info[1], ClassBasedRoutingHandlerInterface::class)
                         );

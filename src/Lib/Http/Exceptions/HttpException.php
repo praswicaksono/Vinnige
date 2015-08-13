@@ -20,7 +20,7 @@ class HttpException extends \RuntimeException
     private $headers = [];
 
     /**
-     * @param string $statusCode
+     * @param int $statusCode
      * @param string $message
      * @param array $headers
      * @param int $code

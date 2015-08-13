@@ -2,16 +2,16 @@
 
 namespace Vinnige\Providers;
 
+use PHPixie\HTTP;
 use PHPixie\Slice;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\EventSubscriberInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
-use PHPixie\HTTP;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Class KernelServiceProvider
@@ -86,7 +86,7 @@ class KernelServiceProvider implements ServiceProviderInterface, EventSubscriber
                 $class,
                 function () use ($class, $args) {
                     $stream = (new \ReflectionClass($class))->newInstance($args);
-                    if (! $stream instanceof StreamInterface) {
+                    if (!$stream instanceof StreamInterface) {
                         throw new \RuntimeException(
                             sprintf('Http response stream must be instance of %s', StreamInterface::class)
                         );

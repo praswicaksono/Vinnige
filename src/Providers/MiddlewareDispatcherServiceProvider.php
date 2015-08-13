@@ -2,11 +2,10 @@
 
 namespace Vinnige\Providers;
 
-use Vinnige\Application;
+use Relay\RelayBuilder;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\MiddlewareInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
-use Relay\RelayBuilder;
 
 /**
  * Class MiddlewareDispatcherServiceProvider
@@ -56,7 +55,7 @@ class MiddlewareDispatcherServiceProvider implements ServiceProviderInterface
 
         $concrete = $this->app[$class];
 
-        if (! $concrete instanceof MiddlewareInterface) {
+        if (!$concrete instanceof MiddlewareInterface) {
             $message = printf('middleware %s must be instance of %s', $class, MiddlewareInterface::class);
 
             // TODO: log this error

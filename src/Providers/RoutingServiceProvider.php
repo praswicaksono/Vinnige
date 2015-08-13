@@ -2,13 +2,12 @@
 
 namespace Vinnige\Providers;
 
-use FastRoute\RouteParser\Std as RouteParser;
-use FastRoute\RouteParser as RouteParserInterface;
-use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
 use FastRoute\DataGenerator as DataGeneratorInterface;
-use FastRoute\RouteCollector;
+use FastRoute\DataGenerator\GroupCountBased as DataGenerator;
 use FastRoute\Dispatcher\GroupCountBased as RouteDispatcher;
-use Vinnige\Application;
+use FastRoute\RouteCollector;
+use FastRoute\RouteParser as RouteParserInterface;
+use FastRoute\RouteParser\Std as RouteParser;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
 

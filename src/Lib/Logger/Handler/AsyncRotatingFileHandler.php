@@ -17,7 +17,7 @@ class AsyncRotatingFileHandler extends AbstractProcessingHandler
     private $logDir;
 
     /**
-     * @param int $logDir
+     * @param string $logDir
      * @param bool|int $level
      * @param bool|true $bubble
      */
@@ -25,7 +25,7 @@ class AsyncRotatingFileHandler extends AbstractProcessingHandler
     {
         $this->logDir = $logDir;
 
-        parent::__construct($level, $bubble);
+        parent::__construct((int)$level, $bubble);
     }
 
     /**
@@ -35,13 +35,13 @@ class AsyncRotatingFileHandler extends AbstractProcessingHandler
      */
     protected function write(array $record)
     {
-        if (! is_dir($this->logDir)) {
+        if (!is_dir($this->logDir)) {
             $this->createDir();
         }
 
         $filename = $this->logDir . '/' . date('Y-m-d') . '.log';
 
-        swoole_async_write($filename, (string) $record['formatted'], -1);
+        swoole_async_write($filename, (string)$record['formatted'], -1);
     }
 
     /**

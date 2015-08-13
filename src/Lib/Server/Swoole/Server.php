@@ -12,14 +12,13 @@ use Vinnige\Contracts\ServerInterface;
 class Server implements ServerInterface
 {
     /**
-     * @var ContainerInterface
-     */
-    private $app;
-
-    /**
      * @var \swoole_http_server
      */
     public $server;
+    /**
+     * @var ContainerInterface
+     */
+    private $app;
 
     /**
      * @param ContainerInterface $app

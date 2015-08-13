@@ -327,7 +327,7 @@ class Application implements ContainerInterface
      */
     public function isServerExist()
     {
-        if (! $this->container->offsetExists('Server')) {
+        if (!$this->container->offsetExists('Server')) {
             throw new \RuntimeException('server must be set in container');
         }
 

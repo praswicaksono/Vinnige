@@ -3,10 +3,10 @@
 namespace Vinnige\Providers;
 
 use Vinnige\Contracts\ContainerInterface;
-use Vinnige\Contracts\ServiceProviderInterface;
 use Vinnige\Contracts\ServerInterface;
 use Vinnige\Contracts\ServerRequestHandlerInterface;
 use Vinnige\Contracts\ServerResponderInterface;
+use Vinnige\Contracts\ServiceProviderInterface;
 use Vinnige\Lib\Server\Swoole\Server;
 use Vinnige\Lib\Server\Swoole\ServerRequestHandler;
 use Vinnige\Lib\Server\Swoole\ServerResponder;

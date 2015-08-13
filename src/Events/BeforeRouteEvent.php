@@ -2,8 +2,8 @@
 
 namespace Vinnige\Events;
 
-use Symfony\Component\EventDispatcher\Event;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class BeforeRouteEvent

@@ -26,7 +26,7 @@ class LaravelContainer implements ContainerInterface
 
     /**
      * @param array|string $abstract
-     * @param callable|\Closure|null $concrete
+     * @param string|\Closure|null $concrete
      */
     public function bind($abstract, $concrete = null)
     {
@@ -35,7 +35,7 @@ class LaravelContainer implements ContainerInterface
 
     /**
      * @param array|string $abstract
-     * @param null $concrete
+     * @param string|\Closure|null $concrete
      */
     public function singleton($abstract, $concrete = null)
     {

@@ -4,10 +4,10 @@ namespace Vinnige\Providers;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
+use Monolog\Logger;
 use Psr\Log\InvalidArgumentException;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
-use Monolog\Logger;
 
 /**
  * Class MonologServiceProvider
