@@ -6,6 +6,7 @@ use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
 use Psr\Log\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
 
@@ -66,5 +67,7 @@ class MonologServiceProvider implements ServiceProviderInterface
 
             }
         );
+
+        $container->bind(LoggerInterface::class, 'Logger');
     }
 }
