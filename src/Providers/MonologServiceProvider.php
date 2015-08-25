@@ -68,6 +68,6 @@ class MonologServiceProvider implements ServiceProviderInterface
             }
         );
 
-        $container->bind(LoggerInterface::class, 'Logger');
+        $app->bind(LoggerInterface::class, 'Logger');
     }
 }
