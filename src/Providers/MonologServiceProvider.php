@@ -39,7 +39,7 @@ class MonologServiceProvider implements ServiceProviderInterface
                  * register logger handler
                  */
                 foreach ($app['Config']['logger.handler'] as $class => $config) {
-                    $handler = (new \ReflectionClass($class))->newInstance($config['args']);
+                    $handler = (new \ReflectionClass($class))->newInstanceArgs($config['args']);
 
                     if (!$handler instanceof HandlerInterface) {
                         throw new \InvalidArgumentException(sprintf(
