@@ -52,6 +52,7 @@ class ServerResponder implements ServerResponderInterface
             $this->app['SwooleResponder']->gzip($this->app['Config']['server.gzip']);
         }
 
+        $this->app['SwooleResponder']->status($response->getStatusCode());
         $this->app['SwooleResponder']->header('Server', 'vinnige-app-server');
 
         $this->app['SwooleResponder']->end((string)$response->getBody());
