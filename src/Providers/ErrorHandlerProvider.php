@@ -63,6 +63,8 @@ class ErrorHandlerProvider implements ServiceProviderInterface
                 $this->whoops = new Run();
                 $this->whoops->allowQuit(false);
                 $this->whoops->pushHandler($this->errorHandler);
+
+                return new ErrorHandler($this->app, $this->whoops);
             }
         );
 
