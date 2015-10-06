@@ -12,6 +12,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\EventSubscriberInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
+use Vinnige\Lib\Http\ParsedBody;
+use Vinnige\Lib\Http\Query;
 
 /**
  * Class KernelServiceProvider
@@ -74,7 +76,9 @@ class KernelServiceProvider implements ServiceProviderInterface, EventSubscriber
                 HTTP::class => 'Request'
             ],
             function () {
-                return $this->app['Http']->sapiServerRequest();
+                $parsedBody = new ParsedBody($_POST);
+                $query = new Query($_GET);
+                return $this->app['Http']->sapiServerRequest(null, $query, $parsedBody);
             }
         );
 
