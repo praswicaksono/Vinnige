@@ -58,9 +58,8 @@ class ErrorHandlerProvider implements ServiceProviderInterface
                     && $this->app['Config']->offsetGet('debug') === true
                 ) {
                     $this->errorHandler = new PrettyPageHandler();
+                    $this->errorHandler->handleUnconditionally(true);
                 }
-
-                $this->errorHandler->handleUnconditionally(true);
                 $this->whoops = new Run();
                 $this->whoops->allowQuit(false);
                 $this->whoops->pushHandler($this->errorHandler);
