@@ -5,6 +5,7 @@ namespace Vinnige\Providers;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Contracts\ServiceProviderInterface;
 use Vinnige\Lib\ErrorHandler\ErrorHandler;
+use Whoops\Handler\HandlerInterface;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
@@ -25,6 +26,19 @@ class ErrorHandlerProvider implements ServiceProviderInterface
     private $app;
 
     /**
+     * @var HandlerInterface
+     */
+    private $errorHandler;
+
+    /**
+     * @param HandlerInterface $handler
+     */
+    public function __construct(HandlerInterface $handler)
+    {
+        $this->errorHandler = $handler;
+    }
+
+    /**
      * @param ContainerInterface $application
      * @throws \InvalidArgumentException
      */
@@ -35,25 +49,21 @@ class ErrorHandlerProvider implements ServiceProviderInterface
         /**
          * register whoops when debug mode enabled
          */
-
-
         $this->app->singleton(
             [
                 ErrorHandler::class => 'ErrorHandler'
             ],
             function () {
-                if ($this->app['Config']->offsetExists('debug')) {
-                    $pageHandler = new PrettyPageHandler();
-                    $pageHandler->handleUnconditionally(true);
-
-                    $this->whoops = new Run();
-                    $this->whoops->allowQuit(false);
-                    $this->whoops->pushHandler($pageHandler);
-
-                    return new ErrorHandler($this->app, $this->whoops);
-                } else {
-                    return new ErrorHandler($this->app, null);
+                if ($this->app['Config']->offsetExists('debug')
+                    && $this->app['Config']->offsetGet('debug') === true
+                ) {
+                    $this->errorHandler = new PrettyPageHandler();
                 }
+
+                $this->errorHandler->handleUnconditionally(true);
+                $this->whoops = new Run();
+                $this->whoops->allowQuit(false);
+                $this->whoops->pushHandler($this->errorHandler);
             }
         );
 
