@@ -67,4 +67,12 @@ class ParsedBody implements \ArrayAccess, \Countable
     {
         return count($this->post);
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return (array) $this->post;
+    }
 }
