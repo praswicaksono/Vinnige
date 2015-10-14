@@ -31,11 +31,17 @@ class ErrorHandlerProvider implements ServiceProviderInterface
     private $errorHandler;
 
     /**
-     * @param HandlerInterface $handler
+     * @var string
      */
-    public function __construct(HandlerInterface $handler)
+    private $contentType;
+    /**
+     * @param HandlerInterface $handler
+     * @param string $contentType
+     */
+    public function __construct(HandlerInterface $handler, $contentType = 'text/html')
     {
         $this->errorHandler = $handler;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -54,17 +60,14 @@ class ErrorHandlerProvider implements ServiceProviderInterface
                 ErrorHandler::class => 'ErrorHandler'
             ],
             function () {
-                if ($this->app['Config']->offsetExists('debug')
-                    && $this->app['Config']->offsetGet('debug') === true
-                ) {
-                    $this->errorHandler = new PrettyPageHandler();
+                if ($this->errorHandler instanceof PrettyPageHandler) {
                     $this->errorHandler->handleUnconditionally(true);
                 }
                 $this->whoops = new Run();
                 $this->whoops->allowQuit(false);
                 $this->whoops->pushHandler($this->errorHandler);
 
-                return new ErrorHandler($this->app, $this->whoops);
+                return new ErrorHandler($this->app, $this->whoops, $this->contentType);
             }
         );
 

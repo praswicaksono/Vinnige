@@ -3,6 +3,7 @@
 namespace Vinnige\Lib\ErrorHandler;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Vinnige\Contracts\ContainerInterface;
 use Vinnige\Lib\Http\Exceptions\HttpException;
 use Whoops\Exception\ErrorException;
@@ -25,13 +26,20 @@ class ErrorHandler
     private $whoops;
 
     /**
+     * @var string
+     */
+    private $contentType;
+
+    /**
      * @param ContainerInterface $app
      * @param Run $whoops
+     * @param string $contentType
      */
-    public function __construct(ContainerInterface $app, Run $whoops = null)
+    public function __construct(ContainerInterface $app, Run $whoops, $contentType)
     {
         $this->app = $app;
         $this->whoops = $whoops;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -41,10 +49,19 @@ class ErrorHandler
      */
     public function handleError()
     {
+        $error = error_get_last();
+
+        /**
+         * log error
+         */
+        $this->app['Logger']->error($error['message'], [
+            'type' => $error['type'],
+            'file' => $error['file'],
+            'line' => $error['line']
+        ]);
+
         if ($this->app['Config']->offsetExists('debug')
             && $this->app['Config']->offsetGet('debug') === true) {
-            $error = error_get_last();
-
             $exception = new ErrorException(
                 $error['message'],
                 $error['type'],
@@ -70,23 +87,28 @@ class ErrorHandler
      */
     public function handleException(\Exception $exception)
     {
+        $this->app['Logger']->error($exception->getMessage(), [
+            'class' => get_class($exception),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine()
+        ]);
+
         $code = 500;
-        $contentType = 'application/json';
 
         if ($exception instanceof HttpException) {
             $code = $exception->getStatusCode();
         }
 
+
         if ($this->app['Config']->offsetExists('debug')
             && $this->app['Config']->offsetGet('debug') === true) {
-            $contentType = 'text/html';
+            ob_start();
+            $this->whoops->handleException($exception);
+            $html = ob_get_clean();
+            $this->writeToOutput($html, $code, $this->contentType);
+        } else {
+            $this->writeToOutput('whoops something went wrong');
         }
-
-        ob_start();
-        $this->whoops->handleException($exception);
-        $html = ob_get_clean();
-
-        $this->writeToOutput($html, $code, $contentType);
     }
 
     /**
