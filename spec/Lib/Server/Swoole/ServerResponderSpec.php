@@ -40,10 +40,12 @@ class ServerResponderSpec extends ObjectBehavior
         $config->offsetGet('server.gzip')->willReturn(3);
 
         $swoole_res->gzip(3)->shouldBeCalled();
+        $swoole_res->status(200)->shouldBeCalled();
 
         $swoole_res->header('Server', 'vinnige-app-server')->shouldBeCalled();
 
         $response->getBody()->willReturn('hello world');
+        $response->getStatusCode()->willReturn(200);
 
         $swoole_res->end('hello world')->shouldBeCalled();
 
